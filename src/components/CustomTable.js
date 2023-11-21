@@ -22,7 +22,7 @@ const rows = [
 export default function CustomTable() {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }} aria-label="준선 table">
         <TableHead
           sx={{
             backgroundColor: "blue",
