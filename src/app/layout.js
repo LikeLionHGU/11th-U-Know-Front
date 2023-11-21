@@ -3,6 +3,7 @@ import "./globals.css";
 import { Box, CssBaseline } from "@mui/material";
 import theme from "./theme";
 import ThemeProvider from "@/theme";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <ThemeProvider>
         <CssBaseline />
         <body className={inter.className}>
+          <Header />
           <Box
             sx={{
               width: "100%",
