@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Box, CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import theme from "./theme";
+import ThemeProvider from "@/theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <ThemeProvider theme={theme}>
+      <ThemeProvider>
         <CssBaseline />
         <body className={inter.className}>
           <Box
