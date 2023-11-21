@@ -4,9 +4,5 @@ import { Box } from "@mui/material";
 import CustomTable from "@/components/CustomTable";
 
 export default function Home() {
-  return (
-    <div>
-      <CustomTable />
-    </div>
-  );
+  return <div>{/* <CustomTable /> */}Home</div>;
 }
