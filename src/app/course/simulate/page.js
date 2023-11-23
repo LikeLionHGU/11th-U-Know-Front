@@ -9,10 +9,9 @@ export default function page() {
     <div>
       <h3 style={{paddingBottom: "36px"}}>수강계획 시뮬레이션</h3>
       <div style={{display: "flex"}}>
-        <div style={{display: "block", paddingBottom: "12px", paddingLeft: "0px"}}><TextField disabled defaultValue='세계관 1 2학점 필요'></TextField></div>
-        <div style={{display: "block", paddingBottom: "12px", paddingLeft: "8px"}}><TextField disabled defaultValue='세계관 1 2학점 필요'></TextField></div>
-        <div style={{display: "block", paddingBottom: "12px", paddingLeft: "8px"}}><TextField disabled defaultValue='세계관 1 2학점 필요'></TextField></div>
+        
       </div>
+      <CustomTable></CustomTable>
       <CustomTable></CustomTable>
     </div>
   );
