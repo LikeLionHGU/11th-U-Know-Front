@@ -7,10 +7,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import PassBox from "./PassBox";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import AreaSelect from "./Filter/AreaSelect";
 import PassSelect from "./Filter/PassSelect";
 import SearchBar from "./Filter/SearchBar";
+import CategoryButton from "./JudgeTable/CategoryButton";
 // import { styled } from "@mui/material";
 
 // const HeaderCell = styled(TableCell)(({ theme }) => ({
@@ -42,8 +43,17 @@ export default function GraduateJudgeTable() {
       <Box
         sx={{
           display: "flex",
+          gap: "5px",
+          justifyContent: "spaceBetween",
+        }}
+      >
+        <CategoryButton />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
           gap: "20px",
-          pb: "30px",
+          py: "30px",
         }}
       >
         <AreaSelect />

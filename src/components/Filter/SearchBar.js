@@ -13,10 +13,10 @@ export default function SearchBar() {
     <Paper
       component="form"
       sx={{
+        width: "100%",
         p: "2px 4px",
         display: "flex",
         alignItems: "center",
-        width: 400,
         border: 1,
         borderColor: "lightgray",
       }}
