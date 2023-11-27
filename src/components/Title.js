@@ -12,7 +12,7 @@ export default function Title({ title }) {
       }}
     >
       <Typography
-        variant="h6"
+        variant="h5"
         component="div"
         position="start"
         sx={{ width: "100%" }}

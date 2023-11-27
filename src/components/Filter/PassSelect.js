@@ -16,7 +16,7 @@ export default function PassSelect() {
 
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth size="small">
         <InputLabel id="demo-simple-select-label">선택/필수</InputLabel>
         <Select
           labelId="demo-simple-select-label"

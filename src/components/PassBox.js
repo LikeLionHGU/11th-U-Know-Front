@@ -6,14 +6,16 @@ export default function PassBox({ isPass }) {
       <Box
         sx={{
           border: 1,
-          borderRadius: 1,
+          borderRadius: 0.5,
           width: "60px",
-          height: "30px",
+          height: "20px",
+          fontSize: "12px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           borderColor: isPass ? "success.default" : "error.default",
           color: isPass ? "success.default" : "error.default",
+          backgroundColor: isPass ? "success.lighter" : "error.lighter",
         }}
       >
         {isPass ? "합격" : "불합격"}

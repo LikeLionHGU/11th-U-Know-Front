@@ -16,7 +16,7 @@ export default function AreaSelect() {
 
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth size="small">
         <InputLabel id="demo-simple-select-label">해당영역</InputLabel>
         <Select
           labelId="demo-simple-select-label"

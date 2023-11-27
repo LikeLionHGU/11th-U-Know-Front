@@ -135,13 +135,13 @@ export default function palette(themeMode) {
       header: GREY[600],
       disabled: GREY[500],
     },
-    background: {
-      // default: "#F9FAFB"
-      default: "#FFFFFF",
-      sidebar: "#FCFCFD",
-      paper: "#fff",
-      neutral: GREY[200],
-    },
+    // background: {
+    //   // default: "#F9FAFB"
+    //   default: "#FFFFFF",
+    //   sidebar: "#FCFCFD",
+    //   paper: "#fff",
+    //   neutral: GREY[200],
+    // },
     action: {
       ...COMMON.action,
       active: GREY[600],
@@ -168,13 +168,13 @@ export default function palette(themeMode) {
       header: "#B2BAC2",
       disabled: GREY[600],
     },
-    background: {
-      // default: "#1F2937",
-      default: "#0A1929",
-      sidebar: "#0A1929",
-      paper: "#374251",
-      neutral: alpha(GREY[500], 0.16),
-    },
+    // background: {
+    //   // default: "#1F2937",
+    //   default: "#0A1929",
+    //   sidebar: "#0A1929",
+    //   paper: "#374251",
+    //   neutral: alpha(GREY[500], 0.16),
+    // },
     action: {
       ...COMMON.action,
       active: GREY[500],

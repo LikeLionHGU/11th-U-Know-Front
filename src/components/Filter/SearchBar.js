@@ -13,12 +13,14 @@ export default function SearchBar() {
     <Paper
       component="form"
       sx={{
-        width: "100%",
+        minWidth: "100px",
         p: "2px 4px",
         display: "flex",
         alignItems: "center",
         border: 1,
         borderColor: "lightgray",
+        whiteSpace: "nowrap",
+        height: "40px",
       }}
     >
       <IconButton type="button" sx={{ p: "10px" }} aria-label="search">

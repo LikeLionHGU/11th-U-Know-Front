@@ -30,11 +30,11 @@ function createData(
 }
 
 const rows = [
-  createData(false, "공동체리더십훈련1", true, 3, 2, 1),
-  createData(false, "세계관영역1", true, 3, 2, 1),
-  createData(true, "기독교신앙의기초1", true, 3, 2, 1),
-  createData(true, "세계관영역2", false, 3, 2, 1),
-  createData(true, "공동체리더십훈련1-6", true, 3, 2, 1),
+  createData(false, "전공필수", true, 3, 2, 1),
+  createData(false, "전공선택필수", true, 3, 2, 1),
+  createData(true, "설계", true, 3, 2, 1),
+  createData(true, "전공합계", false, 3, 2, 1),
+  // createData(true, "공동체리더십훈련1-6", true, 3, 2, 1),
 ];
 
 export default function GraduateJudgeTable() {
@@ -45,6 +45,7 @@ export default function GraduateJudgeTable() {
           display: "flex",
           gap: "5px",
           justifyContent: "spaceBetween",
+          backgroundColor: "background.grey1",
         }}
       >
         <CategoryButton />
@@ -54,6 +55,8 @@ export default function GraduateJudgeTable() {
           display: "flex",
           gap: "20px",
           py: "30px",
+          px: "30px",
+          backgroundColor: "layout.white",
         }}
       >
         <AreaSelect />
@@ -63,14 +66,15 @@ export default function GraduateJudgeTable() {
       <Table sx={{ minWidth: 650, maxWidth: "1000" }} aria-label="simple table">
         <TableHead
           sx={{
-            borderBottom: 1,
-            borderColor: "primary.light",
+            borderBottom: 2,
+            borderColor: "primary.main",
           }}
         >
           <TableRow>
             <TableCell
               sx={{
                 color: "primary.light",
+                pl: "50px",
               }}
             >
               합격/불합격
@@ -83,14 +87,14 @@ export default function GraduateJudgeTable() {
             >
               해당영역
             </TableCell>
-            <TableCell
+            {/* <TableCell
               sx={{
                 color: "primary.light",
               }}
               align="right"
             >
               선택/필수
-            </TableCell>
+            </TableCell> */}
             <TableCell
               sx={{
                 color: "primary.light",
@@ -110,6 +114,7 @@ export default function GraduateJudgeTable() {
             <TableCell
               sx={{
                 color: "primary.light",
+                pr: "50px",
               }}
               align="right"
             >
@@ -117,22 +122,40 @@ export default function GraduateJudgeTable() {
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {rows.map((row) => (
+        <TableBody sx={{}}>
+          {rows.map((row, idx) => (
             <TableRow
               key={row.isPass}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              sx={{
+                borderBottom: idx !== rows.length - 1 ? 1 : 0,
+                borderColor: "layout.grey4",
+
+                // "&:last-child td, &:last-child th": { border: 0 },
+              }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{
+                  pl: "50px",
+                }}
+              >
                 <PassBox isPass={row.isPass} />
               </TableCell>
               <TableCell align="right">{row.area}</TableCell>
-              <TableCell align="right">
+              {/* <TableCell align="right">
                 {row.isEssential ? "필수" : "선택"}
-              </TableCell>
+              </TableCell> */}
               <TableCell align="right">{row.totalPoint}</TableCell>
               <TableCell align="right">{row.earnedPoint}</TableCell>
-              <TableCell align="right">{row.restPoint}</TableCell>
+              <TableCell
+                align="right"
+                sx={{
+                  pr: "50px",
+                }}
+              >
+                {row.restPoint}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
