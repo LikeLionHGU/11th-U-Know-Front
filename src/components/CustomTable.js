@@ -27,12 +27,12 @@ export default function CustomTable() {
       <Table  aria-label="준선 table">
         <TableHead>
           <TableRow >
-            <TableCell sx={{ width: 740, backgroundColor: "blue"}}>7학기 수강계획 </TableCell>
-            <TableCell sx={{ backgroundColor: "blue"}} align="right"></TableCell>
-            <TableCell sx={{backgroundColor: "blue"}} align="right"></TableCell>
-            <TableCell sx={{ backgroundColor: "blue"}} align="right"></TableCell>
-            <TableCell sx={{ backgroundColor: "blue"}} align="right"></TableCell>
-            <TableCell sx={{backgroundColor: "blue"}} align="right"></TableCell>
+            <TableCell sx={{ width: 740, backgroundColor: "#5592FC"}}>7학기 수강계획 </TableCell>
+            <TableCell sx={{ backgroundColor: "#5592FC"}} align="right"></TableCell>
+            <TableCell sx={{backgroundColor: "#5592FC"}} align="right"></TableCell>
+            <TableCell sx={{ backgroundColor: "#5592FC"}} align="right"></TableCell>
+            <TableCell sx={{ backgroundColor: "#5592FC"}} align="right"></TableCell>
+            <TableCell sx={{backgroundColor: "#5592FC"}} align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,7 +41,10 @@ export default function CustomTable() {
               key={row.name}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell sx={{
+                border:1,
+                borderColor:'blue'
+              }} component="th" scope="row">
                 {row.checked}
               </TableCell>
               <TableCell align="right">{row.name}</TableCell>
