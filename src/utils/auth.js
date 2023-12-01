@@ -16,7 +16,7 @@ response body
 21800000
  */
 
-const userLogin = async (loginData) => {
+export const userLogin = async (loginData) => {
   const response = axiosInstance.post(endpoints.auth.signIn, loginData);
   return response;
 };
@@ -42,7 +42,7 @@ response body
 }
  */
 
-const userRegister = async (registerData) => {
+export const userRegister = async (registerData) => {
   const response = axiosInstance.post(endpoints.auth.signUp, registerData);
   return response;
 };
