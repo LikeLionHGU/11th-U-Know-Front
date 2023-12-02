@@ -1,14 +1,41 @@
 "use client";
+import { isLoginState, userState } from "@/utils/atom";
+import { userLogin, userRegister } from "@/utils/auth";
+import { getLecture } from "@/utils/lecture";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 export default function page() {
+  const router = useRouter();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
+  const [user, setUser] = useRecoilState(userState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+
+  const handleSuccessLogin = async (res) => {
+    await localStorage.setItem("accessToken", res.data.token);
+    setUser(res.data);
+    setIsLogin(true);
+    alert("로그인 성공!");
+    getLecture().then((res) => {
+      console.log(res);
+      router.push("/");
+    });
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(id, password);
+
+    userLogin({ id, password })
+      .then((res) => handleSuccessLogin(res))
+      .catch((err) => {
+        userRegister({ id, password }).then((res) =>
+          userLogin({ id, password }).then((res) => handleSuccessLogin(res))
+        );
+      });
   };
 
   const handleChange = (e) => {

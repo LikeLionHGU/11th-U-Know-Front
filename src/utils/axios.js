@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 // config
 
 // ----------------------------------------------------------------------
@@ -7,17 +7,17 @@ const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 });
 
-axiosInstance.interceptors.response.use(
-  (res) => res,
-  (error) =>
-    Promise.reject(
-      (error.response && error.response.data) || "Something went wrong"
-    )
-);
+// axiosInstance.interceptors.response.use(
+//   (res) => res,
+//   (error) =>
+//     Promise.reject(
+//       (error.response && error.response.data) || "Something went wrong"
+//     )
+// );
 
 axiosInstance.interceptors.request.use((config) => {
-  //    const token = localStorage.getItem('accessToken');
-  const token = process.env.NEXT_PUBLIC_TOKEN;
+  const token = localStorage.getItem("accessToken");
+  //   const token = process.env.NEXT_PUBLIC_TOKEN;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

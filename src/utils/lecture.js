@@ -21,8 +21,8 @@ const { default: axiosInstance, endpoints } = require("./axios");
     []
 
   */
-const getLecture = async () => {
-  const response = axiosInstance.post(endpoints.user.lecture.taken);
+export const getLecture = async () => {
+  const response = await axiosInstance.get(endpoints.user.lecture.taken);
   return response;
 };
 
@@ -53,6 +53,6 @@ const getLecture = async () => {
 */
 
 const getLectureWithPass = async () => {
-  const response = axiosInstance.post(endpoints.user.lecture.pass);
+  const response = await axiosInstance.post(endpoints.user.lecture.pass);
   return response;
 };
