@@ -52,7 +52,7 @@ export const getLecture = async () => {
 
 */
 
-const getLectureWithPass = async () => {
-  const response = await axiosInstance.post(endpoints.user.lecture.pass);
+export const getLectureWithPass = async () => {
+  const response = await axiosInstance.get(endpoints.user.lecture.pass);
   return response;
 };

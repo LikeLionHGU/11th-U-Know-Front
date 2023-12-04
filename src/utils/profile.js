@@ -11,7 +11,7 @@ X
 
  */
 
-const getProfile = async () => {
+export const getProfile = async () => {
   const response = axiosInstance.post(endpoints.user.profile);
   return response;
 };

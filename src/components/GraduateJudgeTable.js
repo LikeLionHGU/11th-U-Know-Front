@@ -12,32 +12,63 @@ import AreaSelect from "./Filter/AreaSelect";
 import PassSelect from "./Filter/PassSelect";
 import SearchBar from "./Filter/SearchBar";
 import CategoryButton from "./JudgeTable/CategoryButton";
+import { getLectureWithPass } from "@/utils/lecture";
 // import { styled } from "@mui/material";
 
 // const HeaderCell = styled(TableCell)(({ theme }) => ({
 //   color: theme.palette.primary.light,
 // }));
 
-function createData(
-  isPass,
-  area,
-  isEssential,
-  totalPoint,
-  earnedPoint,
-  restPoint
-) {
-  return { isPass, area, isEssential, totalPoint, earnedPoint, restPoint };
+function createData(isPassed, lectureType, totalCredit, credit, restCredit) {
+  return { isPassed, lectureType, totalCredit, credit, restCredit };
 }
 
-const rows = [
-  createData(false, "전공필수", true, 3, 2, 1),
-  createData(false, "전공선택필수", true, 3, 2, 1),
-  createData(true, "설계", true, 3, 2, 1),
-  createData(true, "전공합계", false, 3, 2, 1),
-  // createData(true, "공동체리더십훈련1-6", true, 3, 2, 1),
-];
+// const rows = [
+//   createData(false, "전공필수", true, 3, 2, 1),
+//   createData(false, "전공선택필수", true, 3, 2, 1),
+//   createData(true, "설계", true, 3, 2, 1),
+//   createData(true, "전공합계", false, 3, 2, 1),
+//   // createData(true, "공동체리더십훈련1-6", true, 3, 2, 1),
+// ];
 
 export default function GraduateJudgeTable() {
+  const [rows, setRows] = React.useState([]);
+  const [pass, setPass] = React.useState("전체"); // [pass, setPass
+  const [area, setArea] = React.useState("전체");
+  const [areaList, setAreaList] = React.useState([]);
+  const [searchBar, setSearchBar] = React.useState("");
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const response = await getLectureWithPass();
+      console.log("!!", response.data);
+      setRows(
+        response.data.map((row) =>
+          createData(
+            row.isPassed,
+            row.lectureType,
+            row.totalCredit,
+            row.credit,
+            row.totalCredit - row.credit
+          )
+        )
+      );
+      setAreaList(["전체", ...response.data.map((item) => item.lectureType)]);
+    };
+    fetchData();
+  }, []);
+
+  const filterRows = (rows) => {
+    let copyRows = rows;
+    console.log(pass, areaList, searchBar);
+    if (pass !== null && pass !== "전체")
+      copyRows = copyRows.filter((row) => row.isPassed === pass);
+    if (area && area !== "전체")
+      copyRows = copyRows.filter((row) => row.lectureType === area);
+    if (searchBar && searchBar !== "" && searchBar !== "전체")
+      copyRows = copyRows.filter((row) => row.lectureType.includes(searchBar));
+    return copyRows;
+  };
+
   return (
     <TableContainer component={Paper}>
       <Box
@@ -59,9 +90,14 @@ export default function GraduateJudgeTable() {
           backgroundColor: "layout.white",
         }}
       >
-        <AreaSelect />
-        <PassSelect />
-        <SearchBar />
+        <AreaSelect
+          area={area}
+          setArea={setArea}
+          areaList={areaList}
+          setAreaList={setAreaList}
+        />
+        <PassSelect pass={pass} setPass={setPass} />
+        <SearchBar searchBar={searchBar} setSearchBar={setSearchBar} />
       </Box>
       <Table sx={{ minWidth: 650, maxWidth: "1000" }} aria-label="simple table">
         <TableHead
@@ -123,9 +159,9 @@ export default function GraduateJudgeTable() {
           </TableRow>
         </TableHead>
         <TableBody sx={{}}>
-          {rows.map((row, idx) => (
+          {filterRows(rows).map((row, idx) => (
             <TableRow
-              key={row.isPass}
+              key={idx}
               sx={{
                 borderBottom: idx !== rows.length - 1 ? 1 : 0,
                 borderColor: "layout.grey4",
@@ -140,21 +176,21 @@ export default function GraduateJudgeTable() {
                   pl: "50px",
                 }}
               >
-                <PassBox isPass={row.isPass} />
+                <PassBox isPass={row.isPassed} />
               </TableCell>
-              <TableCell align="right">{row.area}</TableCell>
+              <TableCell align="right">{row.lectureType}</TableCell>
               {/* <TableCell align="right">
                 {row.isEssential ? "필수" : "선택"}
               </TableCell> */}
-              <TableCell align="right">{row.totalPoint}</TableCell>
-              <TableCell align="right">{row.earnedPoint}</TableCell>
+              <TableCell align="right">{row.totalCredit}</TableCell>
+              <TableCell align="right">{row.credit}</TableCell>
               <TableCell
                 align="right"
                 sx={{
                   pr: "50px",
                 }}
               >
-                {row.restPoint}
+                {row.restCredit}
               </TableCell>
             </TableRow>
           ))}

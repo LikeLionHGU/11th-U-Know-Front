@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
 import {
@@ -15,10 +17,13 @@ import GraduateJudgeTable from "@/components/GraduateJudgeTable";
 import SugangToggle from "@/components/ToggleButtonGroup";
 import ToggleButtonGroup from "@/components/ToggleButtonGroup";
 import SearchBar from "@/components/Filter/SearchBar";
-import React from "react";
+import React, { useEffect } from "react";
 import { StarIcon } from "@/theme/overrides/CustomIcons";
 import SidebarList from "@/components/Sidebar/SidebarList";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import { endpoints } from "@/utils/axios";
+import { getLectureWithPass } from "@/utils/lecture";
+// import { userState } from "@/utils/atom";
 
 export default function Home() {
   return (
@@ -42,7 +47,7 @@ export default function Home() {
         }}
       >
         <Title title="영역별 졸업심사 결과" />
-      <GraduateJudgeTable />
+        <GraduateJudgeTable />
       </Box>
       <Sidebar />
     </Box>
