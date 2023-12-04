@@ -4,9 +4,8 @@ import React from 'react';
 import CustomTable from "@/components/CustomTable";
 import TextField from '@mui/material/TextField';
 import BACKGROUND from '../../../theme/palette'
-import christmasImage from '../../../../public/ChristmasSale.png';
 
-
+// import christmasImage from '../../../../public/ChristmasSale.png';
 
 export default function page() {
   return (
@@ -17,17 +16,14 @@ export default function page() {
           <p>앞으로 어떻게 해야 졸업할 수 있을지 막막하시죠?</p>
           <p style={{fontWeight: "700"}}>시뮬레이션을 통해 자유롭게 학기 별 계획을 세워보세요!</p>
         </div>
-        <div>
-          <img alt='christmas Image' width="261px" height="147px" src={christmasImage} />
+        <div style={{paddingLeft: "450px", position: "relative"}}>
+          <img src={`/img/Ellipse.png`} width="219px" height="152px" />
+          <img alt='christmas Image' width="261px" height="147px" src={`/img/ChristmasSale.png`} style={{position: "absolute", left: 380, top: 0, objectFit: "cover"}} />
         </div>
       </div>
-      <div display="flex" style={{paddingBottom: "20px", padding: "50px"}}>
-          <h3 style={{paddingBottom: "36px"}}>수강계획 시뮬레이션</h3>
-          <TextField
-      sx={{ paddingRight: '8px', borderColor: '#6A61AB', color: '#6A61AB' }}
-      disabled
-      defaultValue="세계관 1  2학점 필요"
-    />
+      <div display="flex" style={{paddingBottom: "20px", paddingLeft: "123px", paddingTop: "27px"}}>
+          <h3 style={{paddingBottom: "36px"}}>졸업을 위해 채워야 할 영역</h3>
+          <TextField sx={{ paddingRight: '8px', borderColor: '#6A61AB', color: '#6A61AB' }} disabled defaultValue="세계관 1  2학점 필요"/>
           <TextField sx={{paddingRight: "8px", borderColor:"#6A61AB", colro: "#6A61AB"}} disabled defaultValue="세계관 1  2학점 필요"></TextField>
           <TextField sx={{borderColor:"#6A61AB"}} disabled defaultValue="세계관 1  2학점 필요"></TextField>
       </div>
