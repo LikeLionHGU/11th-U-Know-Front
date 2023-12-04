@@ -42,7 +42,7 @@ export default function Home() {
         }}
       >
         <Title title="영역별 졸업심사 결과" />
-        <GraduateJudgeTable />
+      <GraduateJudgeTable />
       </Box>
       <Sidebar />
     </Box>

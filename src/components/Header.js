@@ -1,7 +1,24 @@
+"use client";
+
 import Icon from "@/assets/Icon";
+import { isLoginState, userState } from "@/utils/atom";
+import axiosInstance from "@/utils/axios";
+import { IconButton } from "@mui/material";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function Header() {
+  const setIsLogin = useSetRecoilState(isLoginState);
+  const setUser = useSetRecoilState(userState);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLogin(false);
+    setUser(null);
+    window.location.href = "/auth";
+    alert("로그아웃 되었습니다.");
+  };
   return (
     <div
       style={{
@@ -42,8 +59,12 @@ export default function Header() {
             gap: "20px",
           }}
         >
-          <Icon name="BellIcon" size="30" />
-          <Icon name="LogoutIcon" size="30" />
+          <IconButton>
+            <Icon name="BellIcon" size="50" />
+          </IconButton>
+          <IconButton onClick={handleLogout}>
+            <Icon name="LogoutIcon" size="50" />
+          </IconButton>
         </div>
       </div>
     </div>
