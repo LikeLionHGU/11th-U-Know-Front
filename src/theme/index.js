@@ -16,7 +16,7 @@ import shadows from "./shadows";
 import customShadows from "./customShadows";
 import componentsOverride from "./overrides";
 import GlobalStyles from "./globalStyles";
-import { useRecoilValue } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 import { darkState } from "@/utils/atom";
 
 // ----------------------------------------------------------------------
@@ -47,12 +47,14 @@ export default function ThemeProvider({ children }) {
   theme.components = componentsOverride(theme);
 
   return (
-    <StyledEngineProvider injectFirst>
-      <MUIThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyles />
-        {children}
-      </MUIThemeProvider>
-    </StyledEngineProvider>
+    <RecoilRoot>
+      <StyledEngineProvider injectFirst>
+        <MUIThemeProvider theme={theme}>
+          <CssBaseline />
+          <GlobalStyles />
+          {children}
+        </MUIThemeProvider>
+      </StyledEngineProvider>
+    </RecoilRoot>
   );
 }
