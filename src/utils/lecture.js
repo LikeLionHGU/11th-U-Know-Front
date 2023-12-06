@@ -56,3 +56,10 @@ export const getLectureWithPass = async () => {
   const response = await axiosInstance.get(endpoints.user.lecture.pass);
   return response;
 };
+
+export const getLectureUntaken = async (value) => {
+  const response = await axiosInstance.get(
+    `${endpoints.user.lecture.unTaken}/${value}`
+  );
+  return response;
+};

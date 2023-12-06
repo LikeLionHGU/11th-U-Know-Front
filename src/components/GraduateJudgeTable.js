@@ -12,7 +12,9 @@ import AreaSelect from "./Filter/AreaSelect";
 import PassSelect from "./Filter/PassSelect";
 import SearchBar from "./Filter/SearchBar";
 import CategoryButton from "./JudgeTable/CategoryButton";
-import { getLectureWithPass } from "@/utils/lecture";
+import { getLectureUntaken, getLectureWithPass } from "@/utils/lecture";
+import { useSetRecoilState } from "recoil";
+import { lectureTaken, lectureUnTaken, sidebarTitle } from "@/utils/atom";
 // import { styled } from "@mui/material";
 
 // const HeaderCell = styled(TableCell)(({ theme }) => ({
@@ -32,11 +34,15 @@ function createData(isPassed, lectureType, totalCredit, credit, restCredit) {
 // ];
 
 export default function GraduateJudgeTable() {
+  const setSidebarTitle = useSetRecoilState(sidebarTitle);
   const [rows, setRows] = React.useState([]);
   const [pass, setPass] = React.useState("전체"); // [pass, setPass
   const [area, setArea] = React.useState("전체");
   const [areaList, setAreaList] = React.useState([]);
   const [searchBar, setSearchBar] = React.useState("");
+  const [allTakenLectures, setAllTakenLectures] = React.useState([]); // [allTakenLectures, setAllTakenLectures
+  const setLectureUnTaken = useSetRecoilState(lectureUnTaken);
+  const setLectureTaken = useSetRecoilState(lectureTaken);
   React.useEffect(() => {
     const fetchData = async () => {
       const response = await getLectureWithPass();
@@ -52,6 +58,14 @@ export default function GraduateJudgeTable() {
           )
         )
       );
+
+      let allTakenLectures = {};
+      response.data.forEach((row) => {
+        allTakenLectures[row.lectureType] = row.userLectureResponseList;
+      });
+
+      setAllTakenLectures(allTakenLectures);
+
       setAreaList(["전체", ...response.data.map((item) => item.lectureType)]);
     };
     fetchData();
@@ -67,6 +81,15 @@ export default function GraduateJudgeTable() {
     if (searchBar && searchBar !== "" && searchBar !== "전체")
       copyRows = copyRows.filter((row) => row.lectureType.includes(searchBar));
     return copyRows;
+  };
+
+  const handleRow = async (value) => {
+    setSidebarTitle(value);
+    const response = await getLectureUntaken(value);
+    setLectureUnTaken(response.data);
+    setLectureTaken(allTakenLectures[value]);
+    // console.log(allTakenLectures["major"]);
+    // console.log(response.data, allTakenLectures[value]);
   };
 
   return (
@@ -168,6 +191,7 @@ export default function GraduateJudgeTable() {
 
                 // "&:last-child td, &:last-child th": { border: 0 },
               }}
+              onClick={() => handleRow(rows[idx].lectureType)}
             >
               <TableCell
                 component="th"

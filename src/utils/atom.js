@@ -28,3 +28,18 @@ export const isLoginState = atom({
   default: false,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const lectureUnTaken = atom({
+  key: "lectureUnTaken",
+  default: [],
+});
+
+export const lectureTaken = atom({
+  key: "lectureTaken",
+  default: [],
+});
+
+export const sidebarTitle = atom({
+  key: "sidebarTitle",
+  default: "영역별 수강 현황",
+});

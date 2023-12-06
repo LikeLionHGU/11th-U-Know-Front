@@ -1,4 +1,5 @@
 import { StarIcon } from "@/theme/overrides/CustomIcons";
+import { lectureTaken, lectureUnTaken } from "@/utils/atom";
 import {
   IconButton,
   List,
@@ -7,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useRecoilState } from "recoil";
 
 const data = {
   courses: [
@@ -61,7 +63,20 @@ const data = {
   ],
 };
 
-export default function SidebarList() {
+export default function SidebarList({
+  setSearchWord,
+  searchWord,
+  isTakenSelected,
+  setIsTakenSelected,
+}) {
+  const [leftData, setLeftData] = useRecoilState(lectureUnTaken);
+  const [rightData, setRightData] = useRecoilState(lectureTaken);
+  console.log(leftData, rightData);
+
+  const dataFilter = (data) => {
+    return data.filter((e) => e.name.includes(searchWord));
+  };
+
   return (
     <List
       sx={{
@@ -72,7 +87,10 @@ export default function SidebarList() {
         overflow: "scroll",
       }}
     >
-      {data.courses.map((course) => (
+      {(isTakenSelected
+        ? dataFilter(rightData.map((e) => e.lectureResponse))
+        : dataFilter(leftData)
+      )?.map((course) => (
         <ListItem
           secondaryAction={
             <IconButton edge="end" aria-label="delete">
