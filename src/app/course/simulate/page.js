@@ -6,11 +6,12 @@ import TextField from "@mui/material/TextField";
 import BACKGROUND from "../../../theme/palette";
 import { Box, Button, Chip, Typography } from "@mui/material";
 import Sidebar from "@/components/Sidebar/Sidebar";
-import AddIcon from "@mui/icons-material/Add";
+
 import axiosInstance from "@/utils/axios";
 import { getAllSimulateInfo } from "@/utils/lecture";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { LikeLiberalArts, LikeMajors } from "@/utils/atom";
+import AddModal from "@/components/simulate/AddModal";
 // import christmasImage from '../../../../public/ChristmasSale.png';
 
 export default function page() {
@@ -150,25 +151,7 @@ export default function page() {
               >
                 졸업 시뮬레이션
               </Typography>
-              <Button
-                size="small"
-                sx={{
-                  py: "7px",
-                  px: "10px",
-                  color: "layout.grey5",
-                  borderColor: "layout.grey5",
-                  border: 1,
-                  display: "flex",
-                  itemAlign: "center",
-                }}
-              >
-                <AddIcon
-                  sx={{
-                    fontSize: "20px",
-                  }}
-                />
-                수강계획 추가하기
-              </Button>
+              <AddModal />
             </Box>
             <Box
               sx={{
@@ -176,7 +159,14 @@ export default function page() {
                 gap: "30px",
               }}
             >
-              <Box sx={{ width: "100%" }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "50px",
+                }}
+              >
                 {tables.map((tableData) => (
                   <CustomTable tableData={tableData}></CustomTable>
                 ))}

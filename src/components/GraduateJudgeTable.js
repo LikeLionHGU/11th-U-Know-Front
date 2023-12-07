@@ -21,7 +21,14 @@ import SearchBar from "./Filter/SearchBar";
 import CategoryButton from "./JudgeTable/CategoryButton";
 import { getLectureUntaken, getLectureWithPass } from "@/utils/lecture";
 import { useSetRecoilState } from "recoil";
-import { lectureTaken, lectureUnTaken, sidebarTitle } from "@/utils/atom";
+import {
+  clickedEnum,
+  lectureTaken,
+  lectureUnTaken,
+  sidebarTitle,
+} from "@/utils/atom";
+import { usePathname } from "next/navigation";
+import { lectureConverter } from "@/utils/converter";
 
 function createData(
   isPassed,
@@ -73,7 +80,7 @@ function Row(props) {
         >
           <PassBox isPass={row.isPassed} />
         </TableCell>
-        <TableCell align="right">{row.lectureType}</TableCell>
+        <TableCell align="right">{lectureConverter(row.lectureType)}</TableCell>
         <TableCell align="right">{row.totalCredit}</TableCell>
         <TableCell align="right">{row.credit}</TableCell>
         <TableCell
@@ -154,8 +161,15 @@ function Row(props) {
 // ];
 
 export default function GraduateJudgeTable() {
+  const pathname = usePathname();
+
   const setSidebarTitle = useSetRecoilState(sidebarTitle);
-  const [rows, setRows] = React.useState([]);
+  const [rows, setRows] = React.useState([
+    createData(false, "기독교신앙의기초2", true, 3, 2, 1),
+    createData(false, "세계관영역1", true, 3, 2, 1),
+    createData(true, "기독교신앙의기초1", true, 3, 2, 1),
+    createData(true, "세계관영역2", false, 3, 2, 1),
+  ]);
   const [openRow, setOpenRow] = React.useState(null);
   const [pass, setPass] = React.useState("전체"); // [pass, setPass
   const [area, setArea] = React.useState("전체");
@@ -164,7 +178,9 @@ export default function GraduateJudgeTable() {
   const [allTakenLectures, setAllTakenLectures] = React.useState([]); // [allTakenLectures, setAllTakenLectures
   const setLectureUnTaken = useSetRecoilState(lectureUnTaken);
   const setLectureTaken = useSetRecoilState(lectureTaken);
+  const setClickedEnum = useSetRecoilState(clickedEnum);
   React.useEffect(() => {
+    if (pathname === "/onboard") return;
     const fetchData = async () => {
       const response = await getLectureWithPass();
       console.log("!!", response.data);
@@ -207,8 +223,10 @@ export default function GraduateJudgeTable() {
   const handleRowClick = async (value) => {
     setSidebarTitle(value);
     const response = await getLectureUntaken(value);
+    console.log("sssss", value);
     setLectureUnTaken(response.data);
     setLectureTaken(allTakenLectures[value]);
+    setClickedEnum(value);
     // console.log(allTakenLectures["major"]);
     // console.log(response.data, allTakenLectures[value]);
   };
@@ -386,9 +404,7 @@ export default function GraduateJudgeTable() {
           <TableRow
             sx={{
               "& > *": { borderBottom: "unset" },
-              borderColor: "primary.main",
-              border: 2,
-              color: "primary.main",
+
               borderRadius: "10px",
             }}
           >

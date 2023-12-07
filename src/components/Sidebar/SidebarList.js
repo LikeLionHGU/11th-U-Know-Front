@@ -1,10 +1,4 @@
-import { StarIcon } from "@/theme/overrides/CustomIcons";
-import {
-  LikeLiberalArts,
-  LikeMajors,
-  lectureTaken,
-  lectureUnTaken,
-} from "@/utils/atom";
+import React, { useState } from "react";
 import {
   IconButton,
   List,
@@ -12,62 +6,19 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React from "react";
-import { useRecoilState } from "recoil";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import { StarIcon } from "@/theme/overrides/CustomIcons";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import axiosInstance from "@/utils/axios";
 import { usePathname } from "next/navigation";
-const data = {
-  courses: [
-    {
-      id: 1,
-      name: "Calculus 3",
-      type: "필수",
-      credit: 3,
-    },
-    {
-      id: 2,
-      name: "미분방정식응용",
-      type: "필수",
-      credit: 3,
-    },
-    {
-      id: 3,
-      name: "통계학",
-      type: "필수",
-      credit: 3,
-    },
-    {
-      id: 4,
-      name: "정수론",
-      type: "필수",
-      credit: 3,
-    },
-    {
-      id: 5,
-      name: "실해석학개론",
-      type: "교선필",
-      credit: 3,
-    },
-    {
-      id: 6,
-      name: "일반화학",
-      type: "교선필",
-      credit: 3,
-    },
-    {
-      id: 7,
-      name: "일반물리학",
-      type: "선필",
-      credit: 3,
-    },
-    {
-      id: 8,
-      name: "일반물리학실험",
-      type: "선필",
-      credit: 1,
-    },
-  ],
-};
+import {
+  LikeLiberalArts,
+  LikeMajors,
+  clickedEnum,
+  lectureTaken,
+  lectureUnTaken,
+} from "@/utils/atom";
 
 export default function SidebarList({
   setSearchWord,
@@ -76,63 +27,127 @@ export default function SidebarList({
   setIsTakenSelected,
 }) {
   const pathname = usePathname();
-
+  const enumValue = useRecoilValue(clickedEnum);
   const [leftData, setLeftData] = useRecoilState(
     pathname === "/course/simulate" ? LikeMajors : lectureUnTaken
   );
   const [rightData, setRightData] = useRecoilState(
     pathname === "/course/simulate" ? LikeLiberalArts : lectureTaken
   );
-  console.log(leftData, rightData);
+
+  // 새로 추가한 함수: 드래그 앤 드롭 이벤트 처리
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+
+    // 목적지가 없거나 같은 위치로 이동한 경우 아무것도 하지 않음
+    if (
+      !destination ||
+      (source.index === destination.index &&
+        source.droppableId === destination.droppableId)
+    ) {
+      return;
+    }
+
+    let updatedData = Array.from(isTakenSelected ? rightData : leftData);
+    const [reorderedItem] = updatedData.splice(source.index, 1);
+    updatedData.splice(destination.index, 0, reorderedItem);
+
+    // 업데이트된 데이터로 상태를 설정
+    if (isTakenSelected) {
+      setRightData(updatedData);
+    } else {
+      setLeftData(updatedData);
+    }
+  };
 
   const dataFilter = (data) => {
-    return data.filter((e) => e.name?.includes(searchWord));
+    if (searchWord === "" || !searchWord) return data;
+    return data?.filter((e) => e?.name?.includes(searchWord));
+  };
+
+  const handleClick = (row) => {
+    // console.log(row);
+    if (pathname === "/course/simulate")
+      axiosInstance.post(`/user/addPlanLecture/4/${row.id}/${enumValue}`);
+    else axiosInstance.get(`/user/subjectFavorites/${row.id}/${enumValue}`);
   };
 
   return (
-    <List
-      sx={{
-        width: "100%",
-        maxWidth: 360,
-        maxHeight: 340,
-        bgcolor: "background.paper",
-        overflow: "scroll",
-      }}
-    >
-      {(isTakenSelected
-        ? dataFilter(rightData.map((e) => e.lectureResponse))
-        : pathname === "/course/simulate"
-        ? dataFilter(leftData.map((e) => e.lectureResponse))
-        : dataFilter(leftData)
-      )?.map((course) => (
-        <ListItem
-          secondaryAction={
-            <IconButton edge="end" aria-label="delete">
-              <StarIcon
-                sx={{
-                  color: "primary.main",
-                }}
-              />
-            </IconButton>
-          }
-        >
-          <ListItemText
-            primary={course.name}
-            secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  {`${course.type} * ${course.credit}학점`}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-      ))}
-    </List>
+    <>
+      <Droppable droppableId={`sidebarList`}>
+        {(provided) => (
+          <List
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            sx={{
+              width: "100%",
+              maxWidth: 360,
+              maxHeight: 340,
+              bgcolor: "background.paper",
+              overflow: "scroll",
+            }}
+          >
+            {(isTakenSelected
+              ? dataFilter(rightData.map((e) => e.lectureResponse))
+              : pathname === "/course/simulate"
+              ? dataFilter(leftData.map((e) => e.lectureResponse))
+              : dataFilter(leftData)
+            )?.map((course, index) => (
+              <Draggable
+                key={course.id}
+                draggableId={String(course.id)}
+                index={index}
+              >
+                {(provided) => (
+                  <ListItem
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleClick(course)}
+                      >
+                        {course?.isLiked ? (
+                          <StarIcon
+                            sx={{
+                              color: "primary.main",
+                            }}
+                          />
+                        ) : (
+                          <StarOutlineIcon
+                            sx={{
+                              color: "primary.main",
+                            }}
+                          />
+                        )}
+                      </IconButton>
+                    }
+                  >
+                    <ListItemText
+                      primary={course.name}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            sx={{ display: "inline" }}
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {`${course.type} * ${course.credit}학점`}
+                          </Typography>
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </List>
+        )}
+      </Droppable>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import SidebarList from "./SidebarList";
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { sidebarTitle } from "@/utils/atom";
+import { lectureConverter } from "@/utils/converter";
 
 export default function Sidebar({ button1, button2 }) {
   const [searchWord, setSearchWord] = useState("");
@@ -28,7 +29,9 @@ export default function Sidebar({ button1, button2 }) {
         height: "600px",
       }}
     >
-      <Typography variant="h5">{title}</Typography>
+      <Typography variant="h5">
+        {lectureConverter(title) + " 수강현황"}
+      </Typography>
       <Typography variant="body2" color="layout.grey5">
         찜한 과목은 수강계획 시뮬레이션에 저장됩니다!
       </Typography>

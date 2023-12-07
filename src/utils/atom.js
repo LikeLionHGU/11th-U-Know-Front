@@ -15,12 +15,11 @@ export const darkState = atom({
 export const userState = atom({
   key: "userState",
   default: {
-    id: "",
-    name: "",
+    id: "21800446",
+    name: "오인혁",
     session: "",
     token: "",
   },
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const isLoginState = atom({
@@ -52,4 +51,8 @@ export const LikeMajors = atom({
 export const LikeLiberalArts = atom({
   key: "LikeLiberalArts",
   default: [],
+});
+export const clickedEnum = atom({
+  key: "clickedEnum",
+  default: "",
 });
