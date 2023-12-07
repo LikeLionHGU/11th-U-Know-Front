@@ -2,6 +2,7 @@
 import { isLoginState, userState } from "@/utils/atom";
 import { userLogin, userRegister } from "@/utils/auth";
 import { getLecture } from "@/utils/lecture";
+import { getProfile } from "@/utils/profile";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,14 +17,13 @@ export default function page() {
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
 
   const handleSuccessLogin = async (res) => {
-    await localStorage.setItem("accessToken", res.data.token);
     setUser(res.data);
     setIsLogin(true);
     alert("로그인 성공!");
-    getLecture().then((res) => {
-      console.log(res);
-      router.push("/");
-    });
+    await localStorage.setItem("accessToken", res.data.token);
+    await getLecture();
+    await getProfile();
+    router.push("/");
   };
 
   const handleLogin = (e) => {

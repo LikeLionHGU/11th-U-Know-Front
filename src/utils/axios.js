@@ -48,6 +48,7 @@ export const endpoints = {
     lecture: {
       taken: "/user/get/lecture/list",
       pass: "/user/get/lecture/subject",
+      unTaken: "user/take",
     },
     like: "/user/subjectFavorites",
     plan: {
