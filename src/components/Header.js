@@ -47,7 +47,7 @@ export default function Header() {
             gap: "20px",
           }}
         >
-          <Link href="/graduate/result">졸업심사요건</Link>
+          <Link href="/">졸업심사요건</Link>
           <Link href="/course/simulate">수강계획시뮬레이션</Link>
         </div>
 

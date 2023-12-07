@@ -1,5 +1,10 @@
 import { StarIcon } from "@/theme/overrides/CustomIcons";
-import { lectureTaken, lectureUnTaken } from "@/utils/atom";
+import {
+  LikeLiberalArts,
+  LikeMajors,
+  lectureTaken,
+  lectureUnTaken,
+} from "@/utils/atom";
 import {
   IconButton,
   List,
@@ -9,7 +14,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useRecoilState } from "recoil";
-
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import { usePathname } from "next/navigation";
 const data = {
   courses: [
     {
@@ -69,12 +75,18 @@ export default function SidebarList({
   isTakenSelected,
   setIsTakenSelected,
 }) {
-  const [leftData, setLeftData] = useRecoilState(lectureUnTaken);
-  const [rightData, setRightData] = useRecoilState(lectureTaken);
+  const pathname = usePathname();
+
+  const [leftData, setLeftData] = useRecoilState(
+    pathname === "/course/simulate" ? LikeMajors : lectureUnTaken
+  );
+  const [rightData, setRightData] = useRecoilState(
+    pathname === "/course/simulate" ? LikeLiberalArts : lectureTaken
+  );
   console.log(leftData, rightData);
 
   const dataFilter = (data) => {
-    return data.filter((e) => e.name.includes(searchWord));
+    return data.filter((e) => e.name?.includes(searchWord));
   };
 
   return (
@@ -89,12 +101,18 @@ export default function SidebarList({
     >
       {(isTakenSelected
         ? dataFilter(rightData.map((e) => e.lectureResponse))
+        : pathname === "/course/simulate"
+        ? dataFilter(leftData.map((e) => e.lectureResponse))
         : dataFilter(leftData)
       )?.map((course) => (
         <ListItem
           secondaryAction={
             <IconButton edge="end" aria-label="delete">
-              <StarIcon />
+              <StarIcon
+                sx={{
+                  color: "primary.main",
+                }}
+              />
             </IconButton>
           }
         >

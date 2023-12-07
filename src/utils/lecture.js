@@ -63,3 +63,8 @@ export const getLectureUntaken = async (value) => {
   );
   return response;
 };
+
+export const getAllSimulateInfo = async () => {
+  const response = await axiosInstance.get("/user/getPlanAllInfo");
+  return response;
+};

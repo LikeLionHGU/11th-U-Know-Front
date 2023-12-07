@@ -43,3 +43,13 @@ export const sidebarTitle = atom({
   key: "sidebarTitle",
   default: "영역별 수강 현황",
 });
+
+export const LikeMajors = atom({
+  key: "LikeMajors",
+  default: [],
+});
+
+export const LikeLiberalArts = atom({
+  key: "LikeLiberalArts",
+  default: [],
+});

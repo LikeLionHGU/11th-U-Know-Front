@@ -6,20 +6,23 @@ import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { sidebarTitle } from "@/utils/atom";
 
-export default function Sidebar() {
+export default function Sidebar({ button1, button2 }) {
   const [searchWord, setSearchWord] = useState("");
   const title = useRecoilValue(sidebarTitle);
   const [isTakenSelected, setIsTakenSelected] = React.useState(false);
   return (
     <Box
       sx={{
+        // position: "fixed",
+        // top: 50,
         display: "flex",
         flexDirection: "column",
         gap: "15px",
         minWidth: "400px",
         borderRadius: "10px",
         p: "20px",
-        mt: "60px",
+
+        // mt: "60px",
         backgroundColor: "layout.white",
         position: "sticky",
         height: "600px",
@@ -32,8 +35,8 @@ export default function Sidebar() {
       <ToggleButtonGroup
         isTakenSelected={isTakenSelected}
         setIsTakenSelected={setIsTakenSelected}
-        button1="미수강"
-        button2="수강완료"
+        button1={button1}
+        button2={button2}
       />
 
       <SearchBar searchBar={searchWord} setSearchBar={setSearchWord} />

@@ -1,13 +1,20 @@
 import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PassBox from "./PassBox";
-import { Box, Button } from "@mui/material";
 import AreaSelect from "./Filter/AreaSelect";
 import PassSelect from "./Filter/PassSelect";
 import SearchBar from "./Filter/SearchBar";
@@ -15,15 +22,128 @@ import CategoryButton from "./JudgeTable/CategoryButton";
 import { getLectureUntaken, getLectureWithPass } from "@/utils/lecture";
 import { useSetRecoilState } from "recoil";
 import { lectureTaken, lectureUnTaken, sidebarTitle } from "@/utils/atom";
-// import { styled } from "@mui/material";
 
-// const HeaderCell = styled(TableCell)(({ theme }) => ({
-//   color: theme.palette.primary.light,
-// }));
-
-function createData(isPassed, lectureType, totalCredit, credit, restCredit) {
-  return { isPassed, lectureType, totalCredit, credit, restCredit };
+function createData(
+  isPassed,
+  lectureType,
+  totalCredit,
+  credit,
+  restCredit,
+  details
+) {
+  return { isPassed, lectureType, totalCredit, credit, restCredit, details };
 }
+
+function Row(props) {
+  const subRowDescription = (area) => {
+    switch (area) {
+      case "P/F과목 총이수학점":
+        return "총 이수 학점의 30% 이하 (130학점 대비 기준학점 : 39학점)";
+      case "영어강의":
+        return "교양(6), 전공(21), 둘중 아무거나(3)";
+      case "총 취득 학점":
+        return "130헉점 이상";
+      case "평점 평균":
+        return "2.0 / 4.5 이상";
+      case "졸업 영어 시험":
+        return "토익 700점/오픽 AL 이상";
+      default:
+        return "";
+    }
+  };
+
+  const { row, handleRowClick, isOpen } = props;
+
+  return (
+    <React.Fragment>
+      <TableRow
+        sx={{ "& > *": { borderBottom: "unset" } }}
+        onClick={() => {
+          // e.stopPropagation();
+          handleRowClick(row.lectureType);
+          props.setOpenRow(isOpen ? null : row.lectureType);
+        }}
+      >
+        <TableCell
+          component="th"
+          scope="row"
+          sx={{
+            pl: "50px",
+          }}
+        >
+          <PassBox isPass={row.isPassed} />
+        </TableCell>
+        <TableCell align="right">{row.lectureType}</TableCell>
+        <TableCell align="right">{row.totalCredit}</TableCell>
+        <TableCell align="right">{row.credit}</TableCell>
+        <TableCell
+          align="right"
+          sx={{
+            pr: "50px",
+          }}
+        >
+          {row.restCredit}
+        </TableCell>
+      </TableRow>
+      <TableRow
+        sx={{
+          backgroundColor: "layout.grey2",
+        }}
+      >
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={isOpen} timeout="auto" unmountOnExit>
+            <Box
+              sx={{
+                margin: 1,
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="body2"
+                gutterBottom
+                component="div"
+                sx={{
+                  pl: "25px",
+                }}
+              >
+                {subRowDescription("P/F과목 총이수학점")}
+              </Typography>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
+// import * as React from "react";
+// import Table from "@mui/material/Table";
+// import TableBody from "@mui/material/TableBody";
+// import TableCell from "@mui/material/TableCell";
+// import TableContainer from "@mui/material/TableContainer";
+// import TableHead from "@mui/material/TableHead";
+// import TableRow from "@mui/material/TableRow";
+// import Paper from "@mui/material/Paper";
+// import PassBox from "./PassBox";
+// import { Box, Button } from "@mui/material";
+// import AreaSelect from "./Filter/AreaSelect";
+// import PassSelect from "./Filter/PassSelect";
+// import SearchBar from "./Filter/SearchBar";
+// import CategoryButton from "./JudgeTable/CategoryButton";
+// import { getLectureUntaken, getLectureWithPass } from "@/utils/lecture";
+// import { useSetRecoilState } from "recoil";
+// import { lectureTaken, lectureUnTaken, sidebarTitle } from "@/utils/atom";
+// // import { styled } from "@mui/material";
+
+// // const HeaderCell = styled(TableCell)(({ theme }) => ({
+// //   color: theme.palette.primary.light,
+// // }));
+
+// function createData(isPassed, lectureType, totalCredit, credit, restCredit) {
+//   return { isPassed, lectureType, totalCredit, credit, restCredit };
+// }
 
 // const rows = [
 //   createData(false, "전공필수", true, 3, 2, 1),
@@ -36,6 +156,7 @@ function createData(isPassed, lectureType, totalCredit, credit, restCredit) {
 export default function GraduateJudgeTable() {
   const setSidebarTitle = useSetRecoilState(sidebarTitle);
   const [rows, setRows] = React.useState([]);
+  const [openRow, setOpenRow] = React.useState(null);
   const [pass, setPass] = React.useState("전체"); // [pass, setPass
   const [area, setArea] = React.useState("전체");
   const [areaList, setAreaList] = React.useState([]);
@@ -83,7 +204,7 @@ export default function GraduateJudgeTable() {
     return copyRows;
   };
 
-  const handleRow = async (value) => {
+  const handleRowClick = async (value) => {
     setSidebarTitle(value);
     const response = await getLectureUntaken(value);
     setLectureUnTaken(response.data);
@@ -181,7 +302,7 @@ export default function GraduateJudgeTable() {
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody sx={{}}>
+        {/* <TableBody sx={{}}>
           {filterRows(rows).map((row, idx) => (
             <TableRow
               key={idx}
@@ -189,7 +310,7 @@ export default function GraduateJudgeTable() {
                 borderBottom: idx !== rows.length - 1 ? 1 : 0,
                 borderColor: "layout.grey4",
 
-                // "&:last-child td, &:last-child th": { border: 0 },
+                
               }}
               onClick={() => handleRow(rows[idx].lectureType)}
             >
@@ -203,9 +324,7 @@ export default function GraduateJudgeTable() {
                 <PassBox isPass={row.isPassed} />
               </TableCell>
               <TableCell align="right">{row.lectureType}</TableCell>
-              {/* <TableCell align="right">
-                {row.isEssential ? "필수" : "선택"}
-              </TableCell> */}
+             
               <TableCell align="right">{row.totalCredit}</TableCell>
               <TableCell align="right">{row.credit}</TableCell>
               <TableCell
@@ -218,6 +337,83 @@ export default function GraduateJudgeTable() {
               </TableCell>
             </TableRow>
           ))}
+        </TableBody> */}
+
+        <TableBody>
+          {filterRows(rows).map((row, idx) => (
+            <Row
+              key={idx}
+              row={row}
+              isOpen={openRow === row.lectureType}
+              setOpenRow={setOpenRow}
+              handleRowClick={handleRowClick}
+            />
+          ))}
+
+          <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+            {["", "", "", "", ""].map((content, idx) => (
+              <TableCell
+                key={idx}
+                sx={{
+                  backgroundColor: "layout.grey1",
+                  width: "110px",
+                  height: "30px",
+                  // border: 1,
+                }}
+              >
+                {content}
+              </TableCell>
+              // <TableCell
+              //   sx={{
+              //     backgroundColor: "layout.grey1",
+              //     width: "100%",
+              //     height: "20px",
+              //     border: 1,
+              //   }}
+              // ></TableCell>
+            ))}
+          </TableRow>
+          {/* <Paper
+            sx={{
+              display: "flex",
+              borderColor: "primary.main",
+              border: 1,
+              color: "primary.main",
+              fontWeight: 800,
+            }}
+          > */}
+
+          <TableRow
+            sx={{
+              "& > *": { borderBottom: "unset" },
+              borderColor: "primary.main",
+              border: 2,
+              color: "primary.main",
+              borderRadius: "10px",
+            }}
+          >
+            <TableCell
+              component="th"
+              scope="row"
+              sx={{
+                pl: "50px",
+              }}
+            >
+              <PassBox isPass={true} />
+            </TableCell>
+            <TableCell align="right">최종 교양 판정</TableCell>
+            <TableCell align="right">60학점</TableCell>
+            <TableCell align="right">30학점</TableCell>
+            <TableCell
+              align="right"
+              sx={{
+                pr: "50px",
+              }}
+            >
+              30학점
+            </TableCell>
+          </TableRow>
+          {/* </Paper> */}
         </TableBody>
       </Table>
     </TableContainer>
